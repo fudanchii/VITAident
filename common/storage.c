@@ -4,7 +4,7 @@
 #include "utils.h"
 
 // Thanks TheOfficialFloW!
-static void Storage_GetSizeString(char *string, SceOff size) {
+void Storage_GetSizeString(char *string, SceOff size) {
 	double double_size = (double)size;
 
 	SceInt i = 0;

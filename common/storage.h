@@ -4,6 +4,8 @@
 int Storage_GetTotalCapacity(const char *device, SceOff *size);
 int Storage_GetFreeCapacity(const char *device, SceOff *size);
 int Storage_GetUsedCapacity(const char *device, SceOff *size);
+
+void Storage_GetSizeString(char *string, SceOff size);
 char *Storage_GetCapacityString(SceOff size);
 
 #endif
