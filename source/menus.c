@@ -107,13 +107,12 @@ static void  Menu_ProcessorsInfo(vita2d_font *font) {
     cores = CpuCount;
 
     Menu_DrawText(font, 330, 235, "Implementor:",  "%s", &cpuVendor[0]);
-    Menu_DrawText(font, 330, 270, "ARM:",          "%s %sr%dp%d%s%c",
+    Menu_DrawText(font, 330, 270, "Series:",       "%s %sr%dp%d",
         &cpuFamily[0],
         mpSupport ? "MPCore " : "",
         var,
-        rev,
-        mpSupport ? ", # of Cores: " : "",
-        mpSupport ? 0x30 + cores : 0x00);
+        rev);
+    Menu_DrawText(font, 330, 305, "# of Cores:",   "%d", cores);
 }
 
 static void Menu_StorageInfo(vita2d_font *font, vita2d_texture *texture) {
