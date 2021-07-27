@@ -9,13 +9,15 @@
 #include "storage.h"
 #include "system.h"
 #include "utils.h"
+#include "menus.h"
+#include "arm/cpuinfo.h"
 
 #define BACKGROUND_COLOUR      RGBA8(245, 245, 247, 255)
 #define STATUS_BAR_COLOUR      RGBA8(42, 40, 41, 255)
 #define MENU_BAR_COLOUR        RGBA8(255, 255, 255, 255)
 #define ITEM_COLOUR            RGBA8(0, 0, 0, 255)
 #define ITEM_SELECTED_COLOUR   MENU_BAR_COLOUR
-#define MENU_SELECTOR_COLOUR   RGBA8(220, 70, 35, 255)
+#define MENU_SELECTOR_COLOUR   RGBA8(100, 141, 229, 255)
 #define MENU_INFO_TITLE_COLOUR RGBA8(144, 137, 129, 255)
 #define MENU_INFO_DESC_COLOUR  RGBA8(51, 51, 51, 255)
 #define GAUGE_TOTAL_COLOUR     MENU_INFO_TITLE_COLOUR
@@ -81,14 +83,37 @@ static void Menu_BatteryInfo(vita2d_font *font) {
     Menu_DrawText(font, 330, 340, "Remaining/Full Capacity:", "%i mAh/%i mAh", remain_capacity, full_capacity);
     Menu_DrawText(font, 330, 375, "Temperature:", "%0.1f °C (%0.1f °F)", (temp / 100.0), ((1.8 * temp) / 100.0) + 32.0);
     Menu_DrawText(font, 330, 410, "Voltage:", "%0.1f V" , (voltage / 1000.0));
+    Menu_DrawText(font, 330, 445, "CPU clock:", "%d MHz", Power_GetClockFrequency(ClockFrequencyTypeCPU));
+    Menu_DrawText(font, 330, 480, "BUS clock:", "%d MHz", Power_GetClockFrequency(ClockFrequencyTypeBUS));
+    Menu_DrawText(font, 330, 515, "GPU clock:",
+        Power_GetClockFrequency(ClockFrequencyTypeGPUXbar) > 0 ?
+                                                "%d MHz (Xbar: %d MHz)" :
+                                                "%d MHz", Power_GetClockFrequency(ClockFrequencyTypeGPU),
+                                                          Power_GetClockFrequency(ClockFrequencyTypeGPUXbar));
+
 }
 
 static void  Menu_ProcessorsInfo(vita2d_font *font) {
-    Menu_DrawText(font, 330, 235, "CPU clock frequency:", "%d MHz", Power_GetClockFrequency(ClockFrequencyTypeCPU));
-    Menu_DrawText(font, 330, 270, "BUS clock frequency:", "%d MHz", Power_GetClockFrequency(ClockFrequencyTypeBUS));
-    Menu_DrawText(font, 330, 305, "GPU clock frequency:", Power_GetClockFrequency(ClockFrequencyTypeGPUXbar) > 0?
-        "%d MHz (Xbar: %d MHz)" : "%d MHz", Power_GetClockFrequency(ClockFrequencyTypeGPUXbar), 
-        Power_GetClockFrequency(ClockFrequencyTypeGPU));
+    char cpuVendor[48];
+    char cpuFamily[15];
+    int var, rev, mpSupport, cores;
+
+    cpuinfo_getVendorString(CpuMainId, &cpuVendor[0], 48);
+    cpuinfo_getCpuFamily(CpuMainId, &cpuFamily[0], 15);
+    var = cpuinfo_getVariant(CpuMainId);
+    rev = cpuinfo_getRevision(CpuMainId);
+
+    mpSupport = cpuinfo_getMPSupport(CpuMpId);
+    cores = CpuCount;
+
+    Menu_DrawText(font, 330, 235, "Implementor:",  "%s", &cpuVendor[0]);
+    Menu_DrawText(font, 330, 270, "ARM:",          "%s %sr%dp%d%s%c",
+        &cpuFamily[0],
+        mpSupport ? "MPCore " : "",
+        var,
+        rev,
+        mpSupport ? ", # of Cores: " : "",
+        mpSupport ? 0x30 + cores : 0x00);
 }
 
 static void Menu_StorageInfo(vita2d_font *font, vita2d_texture *texture) {

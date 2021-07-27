@@ -11,3 +11,6 @@ vitaident_user:
       functions:
         - User_GetCurrentFirmware
         - User_GetFactoryFirmware
+        - User_GetCPU_midr
+        - User_GetCPU_mpidr
+        - User_GetCPU_count

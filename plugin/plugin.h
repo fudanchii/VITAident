@@ -53,11 +53,17 @@ typedef struct SceBootArgs {
 extern SceBootArgs sysroot;
 
 // Kernel functions
-int Kenel_GetCurrentFirmware(void);
-int Kenel_GetFactoryFirmware(void);
+int Kernel_GetCurrentFirmware(void);
+uint32_t Kernel_GetFactoryFirmware(void);
+uint32_t Kernel_GetCPU_midr(void);
+uint32_t Kernel_GetCPU_mpidr(void);
+uint32_t Kernel_GetCPU_count(void);
 
 // User functions
 int User_GetCurrentFirmware(void);
-int User_GetFactoryFirmware(void);
+uint32_t User_GetFactoryFirmware(void);
+uint32_t User_GetCPU_midr(void);
+uint32_t User_GetCPU_mpidr(void);
+uint32_t User_GetCPU_count(void);
 
 #endif

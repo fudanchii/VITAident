@@ -4,12 +4,24 @@
 #include "plugin.h"
 
 int User_GetCurrentFirmware(void) {
-    return Kenel_GetCurrentFirmware();
+    return Kernel_GetCurrentFirmware();
 }
 
 // Thanks TheOfficialFloW!
-int User_GetFactoryFirmware(void) {
-    return Kenel_GetFactoryFirmware();
+uint32_t User_GetFactoryFirmware(void) {
+    return Kernel_GetFactoryFirmware();
+}
+
+uint32_t User_GetCPU_midr(void) {
+    return Kernel_GetCPU_midr();
+}
+
+uint32_t User_GetCPU_mpidr(void) {
+    return Kernel_GetCPU_mpidr();
+}
+
+uint32_t User_GetCPU_count(void) {
+    return Kernel_GetCPU_count();
 }
 
 void _start() __attribute__ ((weak, alias("module_start")));

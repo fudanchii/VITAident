@@ -13,7 +13,7 @@ include("${VITASDK}/share/vita.cmake" REQUIRED)
 
 set(VITA_APP_NAME "VITAident")
 set(VITA_TITLEID  "VITAIDENT")
-set(VITA_VERSION  "00.80")
+set(VITA_VERSION  "02.11")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O3 -Wall -Werror")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -83,6 +83,7 @@ set_target_properties(vitaident_kernel
 )
 
 target_link_libraries(vitaident_kernel
+  SceCpuForKernel_stub
   SceModulemgrForKernel_stub
   SceSysmemForDriver_stub
   SceSysrootForDriver_stub

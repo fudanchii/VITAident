@@ -1,6 +1,7 @@
 #include <psp2/kernel/modulemgr.h>
 #include <taihen.h>
 #include <vita2d.h>
+#include <stdint.h>
 
 #include "log.h"
 #include "menus.h"
@@ -9,6 +10,10 @@
 
 SceBootArgs sysroot;
 int _vshKernelSearchModuleByName(const char *module, int unk[2]);
+
+uint32_t CpuMainId = 0;
+uint32_t CpuMpId = 0;
+uint32_t CpuCount = 0;
 
 static int Init_services(void) {
     int search_unk[2], ret = 0;
@@ -29,6 +34,9 @@ static int Init_services(void) {
     // Get sysroot buffer data
     sysroot.current_fw_version = User_GetCurrentFirmware();
     sysroot.factory_fw_version = User_GetFactoryFirmware();
+    CpuMainId = User_GetCPU_midr();
+    CpuMpId = User_GetCPU_mpidr();
+    CpuCount = User_GetCPU_count();
 
     if (R_SUCCEEDED(user_mod)) {
         if (R_FAILED(ret = sceKernelStopUnloadModule(user_mod, 0, NULL, 0, NULL, NULL))) {
